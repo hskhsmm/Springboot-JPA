@@ -50,4 +50,49 @@ public class Order {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
+
+    // == 생성 메서드 == //
+    //생성할 때부터 createOrder 호출해서 값을 쭉쭉 넣어서 생성 메서드에서 완결을 시킴. 복잡한 비즈니스 로직을 응집해놓는것.
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order; //order가 연관관계 걸면서 세팅되고 상태와 주문 시간 정보까지 세팅됨. 생성 지점 변경되면 메서드만 바꾸면 됨.
+    }
+
+
+
+
+    // ==비즈니스 로직==//
+    /**
+     * 주문 취소
+     */
+    public void cancel() {
+        if(delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+        for(OrderItem orderItem : orderItems) {
+            orderItem.cancel(); //오더 아이템 각각 캔슬
+        }
+    }
+
+
+    //==조회 로직==//
+    /**
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }
