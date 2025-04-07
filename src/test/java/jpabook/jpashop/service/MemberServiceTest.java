@@ -1,4 +1,5 @@
 package jpabook.jpashop.service;
+import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import static org.junit.Assert.fail;
 public class MemberServiceTest {
     @Autowired MemberService memberService;
     @Autowired MemberRepository memberRepository;
+    @Autowired EntityManager em;
 
     @Test
     public void 회원가입() throws Exception {
