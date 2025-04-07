@@ -1,26 +1,23 @@
 package jpabook.jpashop.repository;
 
+import jpabook.jpashop.domain.Member;
+import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jpabook.jpashop.domain.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class MemberRepository {
 
-    private final EntityManager em; //스프링이 엔티티 매니저 만들어서 주입
-
+    @PersistenceContext
+    private EntityManager em;
 
     public void save(Member member) {
         em.persist(member);
     }
 
-    public Member findOne(Long id) { //단건 조회.
-        return em.find(Member.class, id); //첫번 째는 타입, 두 번째는 pk
+    public Member findOne(Long id) {
+        return em.find(Member.class, id);
     }
 
     public List<Member> findAll() {
