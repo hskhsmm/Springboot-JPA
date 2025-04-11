@@ -24,7 +24,7 @@ public class OrderService {
      */
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
-        //엔티티 조회
+        //엔티티 조회. 멤버 엔티티 찾고 아이디 찾음.
         Member member = memberRepository.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
