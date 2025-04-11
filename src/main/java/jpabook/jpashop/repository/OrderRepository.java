@@ -25,6 +25,50 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
+    public List<Order> findAllByString(OrderSearch orderSearch) {
+        // JPQL 기본 쿼리
+        String jpql = "select o from Order o join o.member m";
+        boolean isFirstCondition = true;
+
+        // 주문 상태 조건 추가
+        if (orderSearch.getOrderStatus() != null) {
+            if (isFirstCondition) {
+                jpql += " where";
+                isFirstCondition = false;
+            } else {
+                jpql += " and";
+            }
+            jpql += " o.status = :status";
+        }
+
+        // 회원 이름 조건 추가
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            if (isFirstCondition) {
+                jpql += " where";
+                isFirstCondition = false;
+            } else {
+                jpql += " and";
+            }
+            jpql += " m.name like :name";
+        }
+
+        // 쿼리 생성 및 파라미터 바인딩
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+                .setMaxResults(1000); // 최대 1000건
+
+        if (orderSearch.getOrderStatus() != null) {
+            query.setParameter("status", orderSearch.getOrderStatus());
+        }
+
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            query.setParameter("name", "%" + orderSearch.getMemberName() + "%");
+        }
+
+        return query.getResultList();
+    }
+
+
+
     public List<Order> findAllByCriteria(OrderSearch orderSearch) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Order> cq = cb.createQuery(Order.class);
