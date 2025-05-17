@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update   # ?? create, validate ? ??? ??
+      ddl-auto: create   # ?? create, validate ? ??? ??
     show-sql: true
 
 org:
