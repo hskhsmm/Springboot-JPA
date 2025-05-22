@@ -23,4 +23,4 @@ org:
     orm:
       jdbc:
         bind:
-          trace
+          debug
