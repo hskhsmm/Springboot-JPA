@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "orders")
 @Getter
@@ -19,14 +21,14 @@ public class Order {
     private Long id;
 
     //order와 member는 다대일 . member의 입장에선 하나의 회원이 여러 개 주문하니까 일대다.
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member; //주문 회원
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery; //배송정보
 
