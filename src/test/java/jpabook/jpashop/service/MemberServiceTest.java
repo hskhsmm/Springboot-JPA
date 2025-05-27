@@ -17,7 +17,8 @@ import static org.junit.Assert.fail;
 @Transactional
 public class MemberServiceTest {
     @Autowired MemberService memberService;
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Autowired EntityManager em;
 
     @Test
@@ -28,7 +29,7 @@ public class MemberServiceTest {
         //When
         Long saveId = memberService.join(member);
         //Then
-        assertEquals(member, memberRepository.findOne(saveId));
+        assertEquals(member, memberRepository.findById(saveId).get());
     }
     @Test(expected = IllegalStateException.class)
     public void 중복_회원_예외() throws Exception {
